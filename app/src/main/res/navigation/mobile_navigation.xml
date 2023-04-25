@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.groceryappxl.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="Shopping List"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.groceryappxl.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:label="Favorites"
         tools:layout="@layout/fragment_notifications" />
 </navigation>
