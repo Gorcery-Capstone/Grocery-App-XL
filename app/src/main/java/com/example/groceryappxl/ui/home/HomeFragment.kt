@@ -9,6 +9,8 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestHeaders
 import com.codepath.asynchttpclient.RequestParams
@@ -23,6 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var recipeImageList: MutableList<String>
     private lateinit var preferencesList: MutableList<String>
     private lateinit var ingredientStorage: MutableList<List<String>>
+    private lateinit var reciperRecyclerView: RecyclerView
     private var _binding: FragmentHomeBinding? = null
     private val apiKey = "?apiKey=f46430a89c5f4a9ba1a2dd27290b9765"
 
@@ -46,6 +49,8 @@ class HomeFragment : Fragment() {
         recipeNameList = mutableListOf()
         preferencesList = mutableListOf()
         ingredientStorage = mutableListOf()
+        reciperRecyclerView = binding.recipeRecyclerView
+
         val url = "https://api.spoonacular.com/recipes/complexSearch"
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -116,6 +121,10 @@ class HomeFragment : Fragment() {
 
                 //get image of recipe
                 getImage(recipeJSON)
+
+                val adapter = RecipeAdapter(recipeNameList, recipeImageList, ingredientStorage)
+                reciperRecyclerView.adapter = adapter
+                reciperRecyclerView.layoutManager = LinearLayoutManager(this@HomeFragment.context)
 
             }
         }]
