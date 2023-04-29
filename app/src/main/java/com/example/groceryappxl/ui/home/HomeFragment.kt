@@ -61,11 +61,14 @@ class HomeFragment : Fragment() {
         })
 
         return root
+
+
+
     }
 
     private fun getSpoonAcular(query: String?, url: String){
         val client = AsyncHttpClient()
-        val fullUrl = "$url$apiKey&query=$query&instructionsRequired=true&number=1&addRecipeNutrition=false&fillIngredients=true"
+        val fullUrl = "$url$apiKey&query=$query&instructionsRequired=true&number=20&addRecipeNutrition=false&fillIngredients=true"
         val params =  RequestParams();
 
         val requestHeaders = RequestHeaders()
@@ -106,12 +109,13 @@ class HomeFragment : Fragment() {
                 ingredientsArray = recipeJSON.getJSONObject(0).getJSONArray("missedIngredients")
 
                 //seperate all the ingredients
-                seperateIngredients(ingredientsArray)
+                seperateIngredients(recipeJSON)
 
                 //get name of recipe
-
+                getName(recipeJSON)
 
                 //get image of recipe
+                getImage(recipeJSON)
 
             }
         }]
@@ -120,22 +124,47 @@ class HomeFragment : Fragment() {
     fun seperateIngredients(ingredientsArray : JSONArray){
         val ingredientNames = mutableListOf<String>()
 
-        for (i in 0 until ingredientsArray.length()) {
-            val ingredient = ingredientsArray.getJSONObject(i)
-            val name = ingredient.getString("original")
-            ingredientNames.add(name)
+        for(i in 0 until ingredientsArray.length()) {
+            val currentRecipeIngredients = ingredientsArray.getJSONObject(i).getJSONArray("missedIngredients")
+            ingredientNames.clear()
+            for (i in 0 until currentRecipeIngredients.length()) {
+                val ingredient = currentRecipeIngredients.getJSONObject(i)
+                val name = ingredient.getString("original")
+                ingredientNames.add(name)
+            }
+            ingredientStorage.add(ingredientNames)
+
         }
 
-        ingredientStorage.add(ingredientNames)
+
+
+        Log.d("Ingredients", "$ingredientStorage")
+
+
     }
 
     fun getName(recipeArray: JSONArray){
 
+        for (i in 0 until recipeArray.length()) {
+            val ingredient = recipeArray.getJSONObject(i)
+            val name = ingredient.getString("title")
+            recipeNameList.add(name)
+        }
+
+        Log.d("Recipe Names", recipeNameList.toString())
     }
 
-    fun getImage(){
+    fun getImage(recipeArray: JSONArray){
+        for (i in 0 until recipeArray.length()) {
+            val ingredient = recipeArray.getJSONObject(i)
+            val image = ingredient.getString("image")
+            recipeImageList.add(image)
+        }
 
+        Log.d("Image List", recipeImageList.toString())
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
